@@ -1,4 +1,4 @@
-from solar_objects import Star, Planet
+from SolarsSystem.solar_objects import Star, Planet
 
 
 def read_space_objects_data_from_file(input_filename):
