@@ -9,7 +9,7 @@ BRICKS_FIELD_WIDTH, BRICKS_FIELD_HEIGHT = WINDOW_WIDTH, 100
 BRICKS_FIELD_ANCHORPOINT_X, BRICKS_FIELD_ANCHORPOINT_Y = 0, 50
 """ Bricks field if rectangle with coords (0;50) --> (400;150) """
 
-PLATFORM_LINE_ANCHORPOINT_X, PLATFORM_LINE_ANCHORPOINT_Y = 0, 440
+PLATFORM_ANCHORPOINT_X, PLATFORM_ANCHORPOINT_Y = WINDOW_WIDTH//2, 440
 """ Platform line's anchor point """
 
 GAMEMENU_WIDTH, GAMEMENU_HEIGHT = WINDOW_WIDTH, 100
@@ -47,7 +47,7 @@ class BattleFieldView(tk.Canvas):
     def draw_platform(self, platform):
         x1, y1 = platform.x, platform.y
         x2, y2 = x1 + platform.width, y1 + platform.height
-        self.create_rectangle(x1, y1, x2, y2, fill=platform.color)
+        self.platform = self.create_rectangle(x1, y1, x2, y2, fill=platform.color)
 
     def draw_bricks(self, bricks):
         for brick in bricks:
@@ -55,8 +55,25 @@ class BattleFieldView(tk.Canvas):
             x2, y2 = x1 + brick.width, y1 + brick.height
             self.create_rectangle(x1, y1, x2, y2, fill=brick.color)
 
+    def draw_ball(self, ball):
+        x1, y1 = ball.x - ball.r, ball.y - ball.r
+        x2, y2 = ball.x + ball.r, ball.y + ball.r
+        self.ball = self.create_oval(x1, y1, x2, y2, fill=ball.color)
 
+    def update_platform(self, platform):
+        x1, y1 = platform.x, platform.y
+        x2, y2 = x1 + platform.width, y1 + platform.height
+        self.coords(self.platform, x1, y1, x2, y2)
+        self.update()
 
+    def update_bricks(self, bricks):
+        pass
+
+    def update_ball(self, ball):
+        x1, y1 = ball.x - ball.r, ball.y - ball.r
+        x2, y2 = ball.x + ball.r, ball.y + ball.r
+        self.coords(self.ball, x1, y1, x2, y2)
+        self.update()
 
 
 class GameMenuView(tk.Frame):
