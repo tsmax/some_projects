@@ -42,9 +42,17 @@ class BattleFieldView(tk.Canvas):
         self.pack()
 
         self.platform, self.ball, self.bricks = None, None, {}
+        self.lives_count = None
 
     def clean(self):
         self.delete('ALL')
+
+    def draw_lives_count(self, lives):
+        self.lives_count = self.create_text(WINDOW_WIDTH // 2, 25, text='lives: {}'.format(lives), font=15)
+
+    def update_lives_count(self, lives):
+        self.itemconfigure(self.lives_count, text='lives: {}'.format(lives))
+        self.update()
 
     def draw_platform(self, platform):
         x1, y1 = platform.x, platform.y

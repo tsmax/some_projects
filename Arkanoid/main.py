@@ -44,6 +44,7 @@ class ArkanoidApp:
             self.app_view.after(10, self.game_loop)
         elif self.lives > 0:
             self.lives -= 1
+            self.battlefield_view.update_lives_count(self.lives)
             self.pause(None)
             self.battlefield_view.delete_ball()
             self.battlefield_view.delete_platform()
@@ -92,6 +93,7 @@ class ArkanoidApp:
         self.battlefield_view.clean()
         self.game_binding()
         self.lives = 3
+        self.battlefield_view.draw_lives_count(self.lives)
 
         for x in range(0, BRICKS_FIELD_WIDTH, 40):
             for y in range(BRICKS_FIELD_ANCHORPOINT_Y, BRICKS_FIELD_ANCHORPOINT_Y + BRICKS_FIELD_HEIGHT, 20):

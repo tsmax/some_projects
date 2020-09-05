@@ -1,4 +1,4 @@
-from Arkanoid.views import WINDOW_WIDTH, WINDOW_HEIGHT, GAMEMENU_ANCHORPOINT_Y
+from Arkanoid.views import WINDOW_WIDTH, WINDOW_HEIGHT, GAMEMENU_ANCHORPOINT_Y, BRICKS_FIELD_ANCHORPOINT_Y
 from random import randint
 
 class Brick:
@@ -42,7 +42,7 @@ class Ball:
             self.x = WINDOW_WIDTH - self.r
             self.Vx = -self.Vx
 
-        if self.y + self.Vy - self.r <= 0:
+        if self.y + self.Vy - self.r <= BRICKS_FIELD_ANCHORPOINT_Y:
             self.y = 0 + self.r
             self.Vy = -self.Vy
         elif self.y + self.Vy + self.r >= WINDOW_HEIGHT - (WINDOW_HEIGHT - GAMEMENU_ANCHORPOINT_Y):
