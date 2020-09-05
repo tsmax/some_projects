@@ -17,6 +17,7 @@ class ArkanoidApp:
 
         self.app_view, self.battlefield_view, self.gamemenu_view = None, None, None
         self.bricks, self.platform, self.ball = [], None, None
+        self.right_key, self.left_key = False, False
 
         self.app_view = MainAppView()
 
@@ -34,16 +35,47 @@ class ArkanoidApp:
         if destroyed_brick:
             self.destroy_brick(destroyed_brick)
 
+        self.platform.move()
+        self.battlefield_view.update_platform(self.platform)
+
         self.app_view.after(10, self.game_loop)
 
     def destroy_brick(self, destroyed_brick):
         self.battlefield_view.delete_brick(destroyed_brick)
         del self.bricks[self.bricks.index(destroyed_brick)]
 
+    def set_move_direction_platform_press(self, event):
+        if event.keysym == 'Right':
+            if not self.right_key:
+                self.right_key = True
+                if not (self.left_key and self.platform.contact_walls()):
+                    self.platform.Vx += 2
+        elif event.keysym == 'Left':
+            if not self.left_key:
+                self.left_key = True
+                if not (self.right_key and self.platform.contact_walls()):
+                    self.platform.Vx -= 2
+
+    def set_move_direction_platform_release(self, event):
+        if event.keysym == 'Right':
+            self.right_key = False
+            if not self.platform.contact_walls():
+                self.platform.Vx -= 2
+            elif self.platform.contact_walls() and self.left_key:
+                self.platform.Vx -= 2
+        if event.keysym == 'Left':
+            self.left_key = False
+            if not self.platform.contact_walls():
+                self.platform.Vx += 2
+            elif self.platform.contact_walls() and self.right_key:
+                self.platform.Vx += 2
+
+
     def game_binding(self):
         """ Binds all events while game """
-        self.app_view.bind('<Right>', self.move_platform_right)
-        self.app_view.bind('<Left>', self.move_platform_left)
+        self.app_view.bind('<Right>', self.set_move_direction_platform_press)
+        self.app_view.bind('<Left>', self.set_move_direction_platform_press)
+        self.app_view.bind('<KeyRelease>', self.set_move_direction_platform_release)
 
     def create_new_game(self):
         """ Function clean previous battlefield and create new one """
@@ -70,17 +102,6 @@ class ArkanoidApp:
         self.app_view.start_game()
         self.battlefield_view = self.app_view.battlefield_view
         self.gamemenu_view = self.app_view.gamemenu_view
-
-
-    def move_platform_right(self, event):
-        if self.platform.x + self.platform.width < WINDOW_WIDTH:
-            self.platform.x += 10
-            self.battlefield_view.update_platform(self.platform)
-
-    def move_platform_left(self, event):
-        if self.platform.x > 0:
-            self.platform.x -= 10
-            self.battlefield_view.update_platform(self.platform)
 
 
 def main():

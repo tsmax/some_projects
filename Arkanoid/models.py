@@ -75,8 +75,27 @@ class Platform:
         """ Builder of Platform instance
             x, y  --  coords of the top left corner of platform on battlefield
             color  --  color of platform
+            width, height  --  width, height of platform
         """
 
         self.x, self.y = x, y
         self.width, self.height = 40, 10
         self.color = color
+        self.Vx = 0
+
+    def move(self):
+        if self.x + self.Vx < 0:
+            self.x = 0
+            self.Vx = 0
+        elif self.x + self.Vx + self.width > WINDOW_WIDTH:
+            self.x = WINDOW_WIDTH - self.width
+            self.Vx = 0
+        else:
+            self.x += self.Vx
+
+    def contact_walls(self):
+        if self.x + self.Vx <= 0:
+            return True
+        elif self.x + self.Vx + self.width >= WINDOW_WIDTH:
+            return True
+        return False
