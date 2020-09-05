@@ -27,10 +27,17 @@ class ArkanoidApp:
 
     def game_loop(self):
         """ Main loop of game """
-        self.ball.move(self.platform)
+        destroyed_brick = self.ball.move(self.platform, self.bricks)
         self.battlefield_view.update_ball(self.ball)
 
+        if destroyed_brick:
+            self.destroy_brick(destroyed_brick)
+
         self.app_view.after(10, self.game_loop)
+
+    def destroy_brick(self, destroyed_brick):
+        self.battlefield_view.delete_brick(destroyed_brick)
+        del self.bricks[self.bricks.index(destroyed_brick)]
 
     def game_binding(self):
         """ Binds all events while game """

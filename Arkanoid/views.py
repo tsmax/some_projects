@@ -41,6 +41,8 @@ class BattleFieldView(tk.Canvas):
         self.master = master
         self.pack()
 
+        self.platform, self.ball, self.bricks = None, None, {}
+
     def clean(self):
         self.delete('ALL')
 
@@ -53,7 +55,8 @@ class BattleFieldView(tk.Canvas):
         for brick in bricks:
             x1, y1 = brick.x, brick.y
             x2, y2 = x1 + brick.width, y1 + brick.height
-            self.create_rectangle(x1, y1, x2, y2, fill=brick.color)
+            brick_id = self.create_rectangle(x1, y1, x2, y2, fill=brick.color)
+            self.bricks[brick] = brick_id
 
     def draw_ball(self, ball):
         x1, y1 = ball.x - ball.r, ball.y - ball.r
@@ -66,8 +69,8 @@ class BattleFieldView(tk.Canvas):
         self.coords(self.platform, x1, y1, x2, y2)
         self.update()
 
-    def update_bricks(self, bricks):
-        pass
+    def delete_brick(self, brick):
+        self.delete(self.bricks[brick])
 
     def update_ball(self, ball):
         x1, y1 = ball.x - ball.r, ball.y - ball.r
