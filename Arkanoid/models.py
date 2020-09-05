@@ -28,7 +28,7 @@ class Ball:
         self.Vx, self.Vy = -1, -1
         self.motion = False
 
-    def move(self, platform, bricks):
+    def move(self, platform):
         """ Change ball's coords depend of speed and contact with walls/platform """
         self.x += self.Vx
         self.y += self.Vy
@@ -50,12 +50,21 @@ class Ball:
                 and (self.y + self.Vy + self.r == platform.y)):
             self.Vy = -self.Vy
 
+    def hittest_brick(self, bricks):
+        """ Check contact with brick """
         for brick in bricks:
             if ((self.y - self.r <= brick.y + brick.height) and
                     (self.y + self.r >= brick.y)):
                 if brick.x <= self.x <= brick.x + brick.width:
                     self.Vy = -self.Vy
                     return brick
+
+            if ((self.x - self.r <= brick.x + brick.width) and
+                    (self.x + self.r >= brick.x)):
+                if brick.y <= self.y <= brick.y + brick.height:
+                    self.Vx = -self.Vx
+                    return brick
+        return None
 
     def destroy_ball(self):
         pass

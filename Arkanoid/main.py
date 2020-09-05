@@ -27,9 +27,10 @@ class ArkanoidApp:
 
     def game_loop(self):
         """ Main loop of game """
-        destroyed_brick = self.ball.move(self.platform, self.bricks)
+        self.ball.move(self.platform)
         self.battlefield_view.update_ball(self.ball)
 
+        destroyed_brick = self.ball.hittest_brick(self.bricks)
         if destroyed_brick:
             self.destroy_brick(destroyed_brick)
 
