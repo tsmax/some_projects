@@ -9,7 +9,7 @@ BRICKS_FIELD_WIDTH, BRICKS_FIELD_HEIGHT = WINDOW_WIDTH, 100
 BRICKS_FIELD_ANCHORPOINT_X, BRICKS_FIELD_ANCHORPOINT_Y = 0, 50
 """ Bricks field if rectangle with coords (0;50) --> (400;150) """
 
-PLATFORM_ANCHORPOINT_X, PLATFORM_ANCHORPOINT_Y = WINDOW_WIDTH//2, 440
+PLATFORM_ANCHORPOINT_X, PLATFORM_ANCHORPOINT_Y = WINDOW_WIDTH//2 - 20, 440
 """ Platform line's anchor point """
 
 GAMEMENU_WIDTH, GAMEMENU_HEIGHT = WINDOW_WIDTH, 100
@@ -77,6 +77,12 @@ class BattleFieldView(tk.Canvas):
         x2, y2 = ball.x + ball.r, ball.y + ball.r
         self.coords(self.ball, x1, y1, x2, y2)
         self.update()
+
+    def delete_ball(self):
+        self.delete(self.ball)
+
+    def delete_platform(self):
+        self.delete(self.platform)
 
 
 class GameMenuView(tk.Frame):

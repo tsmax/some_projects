@@ -1,5 +1,5 @@
 from Arkanoid.views import WINDOW_WIDTH, WINDOW_HEIGHT, GAMEMENU_ANCHORPOINT_Y
-
+from random import randint
 
 class Brick:
     def __init__(self, x, y, color):
@@ -28,6 +28,7 @@ class Ball:
         self.Vx, self.Vy = 0, 0
         self.V = (self.Vx ** 2 + self.Vy ** 2) ** 0.5
         self.motion = False
+        self.live = 1
 
     def move(self, platform):
         """ Change ball's coords depend of speed and contact with walls/platform """
@@ -48,8 +49,10 @@ class Ball:
             self.destroy_ball()
 
         if ((platform.x <= self.x + self.Vx <= platform.x + platform.width)
-                and (self.y + self.Vy + self.r == platform.y)):
-            self.Vy = -self.Vy
+                and (platform.y + self.Vy >= self.y + self.Vy + self.r >= platform.y)):
+            self.y = platform.y
+            self.Vy = -randint(1, 3)
+            self.Vx = randint(-3, 3)
 
     def hittest_brick(self, bricks):
         """ Check contact with brick and bounces ball """
@@ -68,7 +71,8 @@ class Ball:
         return None
 
     def destroy_ball(self):
-        print(1)
+        self.live = 0
+
 
 class Platform:
     def __init__(self, x, y, color):
