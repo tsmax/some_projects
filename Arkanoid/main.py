@@ -18,6 +18,7 @@ class ArkanoidApp:
         self.app_view, self.battlefield_view, self.gamemenu_view = None, None, None
         self.bricks, self.platform, self.ball = [], None, None
         self.right_key, self.left_key = False, False
+        self.game_running = False
 
         self.app_view = MainAppView()
 
@@ -28,15 +29,16 @@ class ArkanoidApp:
 
     def game_loop(self):
         """ Main loop of game """
-        self.ball.move(self.platform)
-        self.battlefield_view.update_ball(self.ball)
+        if self.game_running:
+            self.ball.move(self.platform)
+            self.battlefield_view.update_ball(self.ball)
 
-        destroyed_brick = self.ball.hittest_brick(self.bricks)
-        if destroyed_brick:
-            self.destroy_brick(destroyed_brick)
+            destroyed_brick = self.ball.hittest_brick(self.bricks)
+            if destroyed_brick:
+                self.destroy_brick(destroyed_brick)
 
-        self.platform.move()
-        self.battlefield_view.update_platform(self.platform)
+            self.platform.move()
+            self.battlefield_view.update_platform(self.platform)
 
         self.app_view.after(10, self.game_loop)
 
@@ -70,12 +72,16 @@ class ArkanoidApp:
             elif self.platform.contact_walls() and self.right_key:
                 self.platform.Vx += 2
 
-
     def game_binding(self):
         """ Binds all events while game """
         self.app_view.bind('<Right>', self.set_move_direction_platform_press)
         self.app_view.bind('<Left>', self.set_move_direction_platform_press)
         self.app_view.bind('<KeyRelease>', self.set_move_direction_platform_release)
+
+    def pause_binding(self):
+        self.app_view.bind('<Right>', self.empty_event)
+        self.app_view.bind('<Left>', self.empty_event)
+        self.app_view.bind('<KeyRelease>', self.empty_event)
 
     def create_new_game(self):
         """ Function clean previous battlefield and create new one """
@@ -102,6 +108,22 @@ class ArkanoidApp:
         self.app_view.start_game()
         self.battlefield_view = self.app_view.battlefield_view
         self.gamemenu_view = self.app_view.gamemenu_view
+
+        self.gamemenu_view.button_start.bind('<Button-1>', self.start)
+        self.gamemenu_view.button_pause.bind('<Button-1>', self.pause)
+
+    def start(self, event):
+        self.game_running = True
+        self.game_binding()
+        if self.ball.Vy == 0:
+            self.ball.Vx, self.ball.Vy = -1, -1
+
+    def pause(self, event):
+        self.game_running = False
+        self.pause_binding()
+
+    def empty_event(self, event):
+        pass
 
 
 def main():

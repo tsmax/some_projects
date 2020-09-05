@@ -18,14 +18,15 @@ class Ball:
         """ Builder of Ball instance
             x, y  --  coords of ball's center on battlefield
             r -- radius of ball
-            Vx, Vy  --  projection of ball's speed
+            Vx, Vy  --  projection of ball's speed (V)
             color  --  color of ball
         """
 
         self.x, self.y = x, y
         self.r = 3
         self.color = color
-        self.Vx, self.Vy = -1, -1
+        self.Vx, self.Vy = 0, 0
+        self.V = (self.Vx ** 2 + self.Vy ** 2) ** 0.5
         self.motion = False
 
     def move(self, platform):
@@ -43,7 +44,7 @@ class Ball:
         if self.y + self.Vy - self.r <= 0:
             self.y = 0 + self.r
             self.Vy = -self.Vy
-        elif self.x + self.Vx + self.r >= WINDOW_HEIGHT - (WINDOW_HEIGHT - GAMEMENU_ANCHORPOINT_Y):
+        elif self.y + self.Vy + self.r >= WINDOW_HEIGHT - (WINDOW_HEIGHT - GAMEMENU_ANCHORPOINT_Y):
             self.destroy_ball()
 
         if ((platform.x <= self.x + self.Vx <= platform.x + platform.width)
@@ -51,7 +52,7 @@ class Ball:
             self.Vy = -self.Vy
 
     def hittest_brick(self, bricks):
-        """ Check contact with brick """
+        """ Check contact with brick and bounces ball """
         for brick in bricks:
             if ((self.y - self.r <= brick.y + brick.height) and
                     (self.y + self.r >= brick.y)):
@@ -67,8 +68,7 @@ class Ball:
         return None
 
     def destroy_ball(self):
-        pass
-
+        print(1)
 
 class Platform:
     def __init__(self, x, y, color):

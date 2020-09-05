@@ -88,5 +88,5 @@ class GameMenuView(tk.Frame):
         self.button_start = tk.Button(self, text='START')
         self.button_start.pack(side='left')
 
-        self.button_stop = tk.Button(self, text='STOP')
-        self.button_stop.pack(side='right')
+        self.button_pause = tk.Button(self, text='PAUSE')
+        self.button_pause.pack(side='right')
